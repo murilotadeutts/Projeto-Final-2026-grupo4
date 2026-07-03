@@ -1,0 +1,22 @@
+{
+  // Configuração de debug/run que sempre funciona com o botão ▶️ (canto
+  // superior direito) ou com F5, mesmo se o VSCode não aplicar o .env.
+  //
+  // "Rodar arquivo atual (raiz do projeto)" roda qualquer arquivo .py aberto,
+  // mas com a pasta raiz no PYTHONPATH e como diretório de trabalho — assim
+  // "import bio" e "arquivos/Flaviviridae-genomes.fasta" sempre funcionam.
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Rodar arquivo atual (raiz do projeto)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    }
+  ]
+}

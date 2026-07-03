@@ -8,6 +8,48 @@ sala de aula: strings, listas, dicionários, funções e, no final, **pandas**.
 
 --------------------------
 
+## ⚠️ IMPORTANTE: como rodar os scripts (leia com atenção!)
+
+Este é o erro que mais atrapalhou a turma no passado. Rode **da raiz do projeto**
+(`Projeto-Final-2026/`) e usando a flag `-m`, exatamente assim:
+
+```
+python -m problemas.exercicios_funcoes
+python -m problemas.projeto
+```
+
+Repare em três detalhes:
+1. Você está na **raiz** do projeto (a pasta que contém `bio/`, `arquivos/` e `problemas/`).
+2. Use **`-m`** (de "módulo").
+3. Escreva `problemas.projeto` com **ponto** e **sem** o `.py` no final (não é
+   `problemas/projeto.py`).
+
+**Por que assim?** Suas funções estão em `bio/`, que fica na raiz. Para o Python encontrar
+`bio`, ele precisa "enxergar" a raiz. O `-m` faz justamente isso: roda o script tratando a
+raiz como ponto de partida. Se você rodar de outro jeito (por exemplo `cd problemas` e depois
+`python projeto.py`), vai receber erros como:
+
+- `ModuleNotFoundError: No module named 'bio'`
+- `FileNotFoundError: ...arquivos/Flaviviridae-genomes.fasta`
+
+> Dica: no terminal, o comando `pwd` mostra em que pasta você está. Antes de rodar,
+> confira que você está na pasta que contém `bio/`, `arquivos/` e `problemas/`.
+
+### Usando o VSCode (o botão ▶️ de "Run")
+
+Se você usa o VSCode e gosta de clicar na **setinha ▶️** para rodar, faça duas coisas:
+
+1. Abra a **pasta do projeto inteira** no VSCode: `Arquivo → Abrir Pasta...` e escolha a
+   pasta `Projeto-Final-2026` (não abra só um arquivo solto, nem uma pasta acima dela).
+2. Este projeto já vem com um `.vscode/settings.json` configurado que faz a setinha
+   encontrar a pasta `bio/` automaticamente. Você não precisa fazer mais nada — só abrir a
+   pasta certa.
+
+Se, mesmo assim, a setinha der `ModuleNotFoundError: No module named 'bio'`, use o terminal
+com o comando `-m` descrito acima, que sempre funciona.
+
+--------------------------
+
 ## Preparando o ambiente
 
 O último problema usa a biblioteca **pandas**. Para instalá-la, rode no terminal:

@@ -1,0 +1,22 @@
+{
+  // ─────────────────────────────────────────────────────────────────────
+  //  Faz a setinha ▶️ ("Run Python File") funcionar a partir de qualquer
+  //  arquivo do projeto, sem o erro "ModuleNotFoundError: No module named 'bio'".
+  //
+  //  A setinha ▶️ roda "python <arquivo>" dentro do terminal integrado do
+  //  VSCode — ela NÃO lê o "python.envFile". Por isso o PYTHONPATH precisa
+  //  ser injetado direto no ambiente do terminal integrado (abaixo), para
+  //  cada sistema operacional.
+  // ─────────────────────────────────────────────────────────────────────
+
+  "terminal.integrated.env.osx": { "PYTHONPATH": "${workspaceFolder}" },
+  "terminal.integrated.env.linux": { "PYTHONPATH": "${workspaceFolder}" },
+  "terminal.integrated.env.windows": { "PYTHONPATH": "${workspaceFolder}" },
+
+  // Ajuda o VSCode a não sublinhar "import bio" como erro.
+  "python.analysis.extraPaths": ["${workspaceFolder}"],
+
+  // Roda a setinha a partir da raiz do projeto, para que o caminho
+  // "arquivos/Flaviviridae-genomes.fasta" também seja encontrado.
+  "python.terminal.executeInFileDir": false
+}

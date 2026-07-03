@@ -11,6 +11,10 @@ Depois de criar as funções em `bio/sequencia.py`, você tem **duas entregas** 
 > **Preparação:** o projeto usa pandas. Se ainda não instalou, rode na raiz do projeto:
 > `pip install -r requirements.txt`
 
+> **⚠️ Como rodar:** da RAIZ do projeto, use `python -m problemas.projeto` (com ponto e sem
+> `.py`) e `python -m problemas.exercicios_funcoes`. Rodar de outro jeito causa
+> `ModuleNotFoundError: No module named 'bio'`. Veja a explicação completa no README da raiz.
+
 =================================================================
 
 # Entrega 1 — Exercícios das funções (`exercicios_funcoes.py`)
