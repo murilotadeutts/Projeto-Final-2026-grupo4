@@ -6,8 +6,8 @@
 # IMPORTANTE: implemente cada função abaixo. Apague o
 # "raise NotImplementedError(...)" quando for resolver.
 
-# Você vai precisar destas constantes na função traduzir():
-# from bio.constantes import DNA_PARA_AMINOACIDO, DNA_STOP_CODONS
+# Você vai precisar destas constantes
+from bio.constantes import DNA_PARA_AMINOACIDO, DNA_STOP_CODONS, CONVERSOR_DE_BASE
 
 
 def complementar(sequencia):
