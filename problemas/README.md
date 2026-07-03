@@ -1,102 +1,138 @@
-# Problemas
+# O Projeto: um panorama da família Flaviviridae
 
-Agora que você criou suas funções em `bio/sequencia.py`, vamos usá-las para resolver
-problemas reais de bioinformática! Cada problema tem um **Objetivo** (o que você vai
-praticar), diz **quais funções usar** e descreve a **tarefa** (os passos).
+Agora que você criou suas funções em `bio/sequencia.py`, vamos usá-las numa **investigação
+de verdade**.
 
-Em todos eles você vai começar lendo o arquivo `arquivos/Flaviviridae-genomes.fasta` com a
-função de apoio `ler_fasta`.
+O arquivo `arquivos/Flaviviridae-genomes.fasta` reúne os genomas de referência de **toda a
+família viral _Flaviviridae_** — mais de 150 vírus diferentes, incluindo velhos conhecidos
+como **Dengue, Zika, Febre Amarela e Hepatite C**. São vírus aparentados, mas de gêneros
+distintos (Orthoflavivirus, Hepacivirus, Pestivirus, Pegivirus...).
 
----------------------------
+Nossa meta é montar uma **tabela** (com pandas) descrevendo esses vírus e, a partir dela,
+responder a duas perguntas:
 
-## Problema 1: Análise de Composição de Nucleotídeos
+1. O **conteúdo GC** dos genomas é distribuído ao acaso, ou vírus parecidos se parecem também nisso?
+2. Esses vírus têm um genoma organizado de forma parecida? Quão grande é a **proteína** que cada um produz?
 
-**Objetivo:** praticar percorrer uma lista de dados e aplicar suas próprias funções para
-descrever a composição de cada sequência. O "conteúdo GC" (percentual de C + G) é uma medida
-muito usada em biologia — ele influencia, por exemplo, a estabilidade do DNA.
+Vamos construir isso por partes. Cada função que você escreveu vai virar uma peça da análise.
 
-**Funções que você vai usar:** `ler_fasta`, `calcular_percentual`.
-
-**Tarefa:** escreva um script que:
-1. Leia o arquivo multiFASTA com `ler_fasta`.
-2. Para cada organismo, imprima o percentual de cada nucleotídeo (A, T, C, G) e o conteúdo
-   GC (percentual de C + G).
-
-Dica: `calcular_percentual(organismo["sequencia"], ["G", "C"])`.
+> **Preparação:** este projeto usa pandas. Se ainda não instalou, rode na raiz do projeto:
+> `pip install -r requirements.txt`
 
 ---------------------------
 
-## Problema 2: Tradução de Nucleotídeos para Proteínas
+## Parte 0 — Aquecimento: teste as suas funções
 
-**Objetivo:** praticar a aplicação da função de tradução — o processo pelo qual a célula
-"lê" o DNA de 3 em 3 bases e monta uma proteína. É um dos conceitos centrais da biologia
-molecular.
+Antes de partir para os 150 vírus, confira que as suas funções funcionam numa sequência
+pequena. Escreva alguns `print` testando:
 
-**Funções que você vai usar:** `ler_fasta`, `traduzir`.
+- `complementar("ATCG")`
+- `complementar_reversa("ATCG")`
+- `transcrever("ATCG")`
+- `encontrar_inicio("CCCATGGGGTAA")` (deve devolver a partir do `ATG`)
+- `traduzir("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG")`
 
-**Tarefa:** escreva um script que:
-1. Leia o arquivo multiFASTA.
-2. Traduza a sequência de cada organismo para a sua proteína correspondente.
-3. Imprima as sequências de proteínas.
+Isso serve para você ganhar confiança de que a base do projeto está correta.
 
-Dica: `traduzir(organismo["sequencia"])`.
-
----------------------------
-
-## Problema 3: Identificação de Mutação em Genomas Virais
-
-#### Contexto
-
-Você está colaborando com uma equipe de virologistas que estuda mutações específicas em
-genomas de vírus da família Flaviviridae. Eles identificaram uma mutação de interesse que
-ocorre na **posição 1000** das sequências, onde o nucleotídeo `A` é substituído por `G`.
-Seu trabalho é identificar se essa mutação está presente nas sequências fornecidas e gerar
-um relatório. Esta análise é importante para entender a evolução dos vírus e suas possíveis
-implicações na virulência e na resistência a tratamentos.
-
-**Objetivo:** praticar acessar uma posição específica de uma string (indexação) e usar isso
-para procurar uma mutação. Lembre-se: em Python a contagem começa no 0, então a "posição
-1000" corresponde ao índice `999`.
-
-**Funções que você vai usar:** `ler_fasta` (e indexação de string, ex: `sequencia[999]`).
-
-**Tarefa:** escreva um script que:
-1. Leia o arquivo multiFASTA com os genomas virais.
-2. Verifique, para cada sequência, se a base na posição 1000 é a da mutação (`G`).
-3. Gere um relatório indicando quais sequências possuem a mutação e quais não possuem.
-
----------------------------
-
-## Problema 4: Montando uma tabela de análise com pandas
-
-#### Contexto
-
-Analisar as sequências uma por uma no terminal funciona, mas quando temos **muitos**
-organismos (o nosso arquivo tem mais de 150!) fica difícil comparar. Cientistas costumam
-organizar tudo em uma **tabela** para ordenar, filtrar e resumir os dados com facilidade.
-É exatamente para isso que serve o pandas.
-
-**Objetivo:** praticar pandas — montar um `DataFrame` a partir dos dados do FASTA, criar
-colunas calculadas usando as funções que você escreveu, e então ordenar, filtrar e salvar
-o resultado.
-
-**Funções que você vai usar:** `ler_fasta`, `calcular_percentual`, `contar_bases` (e o
-pandas: `import pandas as pd`).
-
-**Tarefa:** escreva um script que:
-1. Leia o arquivo multiFASTA com `ler_fasta` e monte um DataFrame:
-   `df = pd.DataFrame(organismos)` (cada organismo vira uma linha!).
-2. Crie novas colunas calculadas a partir da coluna `sequencia`:
-   - `tamanho`: o número de bases da sequência.
-   - `gc`: o conteúdo GC (use `calcular_percentual`).
-   - (opcional) uma coluna para a contagem de cada base (use `contar_bases`).
-3. **Ordene** a tabela pelo conteúdo GC e mostre as 10 sequências com maior GC.
-4. **Filtre** a tabela para ver só os organismos com GC acima de 50% (`gc > 0.5`).
-5. **Salve** o resultado em um arquivo `.csv`.
-
-Dica para criar uma coluna aplicando uma função a cada linha:
+Dica de import:
 ```python
-df["gc"] = df["sequencia"].apply(lambda s: calcular_percentual(s, ["G", "C"]))
+from bio.sequencia import (complementar, complementar_reversa, transcrever,
+                           traduzir, calcular_percentual, contar_bases,
+                           encontrar_inicio)
+```
+
+---------------------------
+
+## Parte 1 — Montando a tabela
+
+**Objetivo:** transformar os dados do FASTA numa tabela do pandas, onde cada linha é um vírus.
+
+1. Leia o arquivo com `ler_fasta` (ele devolve uma lista de dicionários).
+2. Monte o DataFrame: `df = pd.DataFrame(organismos)`. Você deve ter as colunas
+   `id`, `nome` e `sequencia`.
+3. Crie a coluna `tamanho` com o número de bases de cada genoma.
+
+Dicas:
+```python
+import pandas as pd
+from bio.ler_fasta import ler_fasta
+
+organismos = ler_fasta("arquivos/Flaviviridae-genomes.fasta")
+df = pd.DataFrame(organismos)
 df["tamanho"] = df["sequencia"].apply(len)
 ```
-Dica para salvar: `df.to_csv("resultado.csv", index=False)`.
+
+---------------------------
+
+## Parte 2 — O conteúdo GC é aleatório?
+
+**Objetivo:** usar a coluna de GC para investigar se vírus parecidos têm GC parecido.
+
+O **conteúdo GC** é o percentual de bases C + G no genoma. Ele varia de vírus para vírus.
+Vamos ver se essa variação diz alguma coisa.
+
+1. Crie a coluna `gc` usando a sua função `calcular_percentual`.
+2. **Ordene** a tabela por `gc` e mostre, **com o nome**, os 10 vírus de **maior** GC e os
+   10 de **menor** GC.
+3. **Conclusão (escreva num `print` ou comentário):** olhe os nomes dos dois extremos.
+   Os vírus de GC mais alto parecem ser do mesmo tipo entre si? E os de GC mais baixo?
+   Repare nas palavras que se repetem nos nomes. O GC parece aleatório ou não?
+
+Dicas:
+```python
+df["gc"] = df["sequencia"].apply(lambda s: calcular_percentual(s, ["G", "C"]))
+df.sort_values("gc", ascending=False)[["nome", "gc"]].head(10)   # maior GC
+df.sort_values("gc")[["nome", "gc"]].head(10)                     # menor GC
+```
+
+---------------------------
+
+## Parte 3 — Encontrando a proteína (a poliproteína viral)
+
+**Objetivo:** usar `encontrar_inicio` + `traduzir` para descobrir o tamanho da proteína de
+cada vírus, e ver o que isso revela sobre a organização do genoma.
+
+Um detalhe importante de biologia: nos Flaviviridae, o genoma inteiro é traduzido como
+**uma única proteína gigante** (chamada *poliproteína*), que depois a célula corta em
+pedaços menores. Repare que os nomes no FASTA dizem "**polyprotein**"!
+
+Mas atenção: a tradução do gene **não começa na primeira base** do genoma — há um trecho
+inicial que não é traduzido. Por isso precisamos primeiro achar o **start codon** (`ATG`)
+com a sua função `encontrar_inicio`, e só então traduzir.
+
+1. Crie a coluna `proteina`: para cada sequência, ache o início com `encontrar_inicio` e
+   traduza **parando no primeiro stop codon** (`parar=True`).
+2. Crie a coluna `tamanho_proteina` com o número de aminoácidos dessa proteína.
+3. Crie a coluna `cobertura`: quanto do genoma essa proteína ocupa. Como cada aminoácido
+   vem de 3 bases, isso é `(tamanho_proteina * 3) / tamanho`.
+4. **Conclusão (escreva num `print` ou comentário):** qual é a cobertura *típica* (use
+   `df["cobertura"].median()`)? Para a maioria dos vírus, a proteína cobre uma parte grande
+   do genoma? Isso combina com a ideia de que esses vírus têm **uma** poliproteína só?
+   (Você também vai notar alguns casos com cobertura baixa — nesses, o primeiro `ATG` que
+   achamos não era o começo certo do gene. Não tem problema, comente que isso acontece.)
+
+Dicas:
+```python
+df["proteina"] = df["sequencia"].apply(lambda s: traduzir(encontrar_inicio(s), parar=True))
+df["tamanho_proteina"] = df["proteina"].apply(len)
+df["cobertura"] = (df["tamanho_proteina"] * 3) / df["tamanho"]
+```
+
+---------------------------
+
+## Parte 4 — Salvando o resultado
+
+**Objetivo:** guardar a sua tabela final para consulta.
+
+1. **Filtre** a tabela para ver só os vírus com GC acima de 50% (`df["gc"] > 0.5`) —
+   quantos são?
+2. **Salve** a tabela completa num arquivo `.csv`.
+
+Dica:
+```python
+df.to_csv("resultado.csv", index=False)
+```
+
+Pronto! Você partiu de um arquivo de texto com 150+ genomas e chegou a uma tabela que
+revela padrões reais da biologia desses vírus. É exatamente assim que se começa uma análise
+de bioinformática.

@@ -98,17 +98,22 @@ def contar_bases(sequencia):
     raise NotImplementedError("Implemente a função contar_bases")
 
 
-def distancia_hamming(sequencia_a, sequencia_b):
+def encontrar_inicio(sequencia):
     """
-    Compara duas sequências do mesmo tamanho e retorna em quantas posições
-    elas são DIFERENTES (a chamada "distância de Hamming").
+    Retorna a sequência a partir do primeiro START CODON (o códon "ATG").
 
-    Ex: distancia_hamming("ATCG", "ATGG") -> 1   (diferem só na 3a base)
+    O ATG é onde a tradução de um gene começa (ele também codifica o primeiro
+    aminoácido, a metionina "M"). Antes dele costuma haver uma região que não
+    é traduzida, então, para achar a proteína, primeiro precisamos "pular" até
+    esse início.
 
-    É uma forma simples de medir o quão "parecidas" são duas sequências:
-    quanto maior a distância, mais mutações há entre elas.
+    Ex: encontrar_inicio("CCATGGGGTAA") -> "ATGGGGTAA"
+    Se não houver nenhum "ATG", retorne uma string vazia "".
 
-    Dica: percorra as duas sequências ao mesmo tempo, posição por posição,
-    e conte as posições em que as bases não batem.
+    Depois, é só traduzir o resultado:
+        traduzir(encontrar_inicio(sequencia), parar=True)
+
+    Dica: as strings têm um método .find("ATG") que devolve a posição do
+    primeiro "ATG" (ou -1 se não encontrar). A partir daí, use fatiamento.
     """
-    raise NotImplementedError("Implemente a função distancia_hamming")
+    raise NotImplementedError("Implemente a função encontrar_inicio")

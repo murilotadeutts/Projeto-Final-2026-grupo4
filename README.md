@@ -89,17 +89,19 @@ recebe a sequência como uma **string** e devolve um resultado.
   - Retorna um dicionário com a contagem de cada base.
   - Ex: `contar_bases("ATCGA")` -> `{"A": 2, "T": 1, "C": 1, "G": 1}`
 
-- `distancia_hamming(sequencia_a, sequencia_b)` — (inventada por nós)
-  - Compara duas sequências do mesmo tamanho e retorna em quantas posições elas diferem.
-    É uma forma simples de medir quantas mutações há entre duas sequências.
-  - Ex: `distancia_hamming("ATCG", "ATGG")` -> `1`
+- `encontrar_inicio(sequencia)` — (inventada por nós)
+  - Retorna a sequência a partir do primeiro **start codon** (`ATG`), que é onde a tradução
+    de um gene começa. Se não houver `ATG`, retorna uma string vazia `""`.
+  - Ex: `encontrar_inicio("CCATGGGGTAA")` -> `"ATGGGGTAA"`
+  - Usamos ela junto com `traduzir` para achar a proteína: `traduzir(encontrar_inicio(seq), parar=True)`.
 
 ----------------------
 
 ## Usando
 
-Depois de criar suas funções, vamos usá-las para resolver alguns problemas de verdade!
-Os problemas estão descritos na pasta `problemas`.
+Depois de criar suas funções, vamos usá-las numa investigação de verdade: montar uma tabela
+(com pandas) descrevendo mais de 150 vírus da família Flaviviridae e tirar conclusões sobre
+eles. O projeto está descrito na pasta `problemas` (arquivo `problemas/README.md`).
 
 -----------------------
 
