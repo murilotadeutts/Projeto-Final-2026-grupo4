@@ -1,10 +1,12 @@
 # Projeto - Escrevendo nossa própria "BioPython"
 
 Para treinar o que aprendemos durante o curso, vamos criar algumas funções inspiradas na
-biblioteca BioPython. E vamos usá-las para resolver alguns problemas de Bioinformática.
+biblioteca BioPython. 
 
-Vai ser algo simplificado, apenas com o intuito de treinarmos as ferramentas que vimos em
-sala de aula: strings, listas, dicionários, funções e, no final, **pandas**.
+E vamos usá-las para analisar um arquivo de Bioinformática.
+
+O intuito é treinarmos as ferramentas que vimos em
+sala de aula: strings, listas, dicionários, funções e, no final, análise de dados.
 
 --------------------------
 
@@ -24,14 +26,17 @@ python projeto.py
 O último problema usa a biblioteca **pandas**. Para instalá-la, rode no terminal:
 
 ```
-pip install -r requirements.txt
+pip install pandas
 ```
+
+Caso não consiga importar depois, no drive da disciplina tem um arquivo com instruções 
+(ensinando caso tenha mais de um python instalado, como utilizar o correto).
 
 --------------------------
 
 ## Como os dados são representados
 
-Nada de classes por aqui! Vamos usar só o que já conhecemos:
+Vamos usar só o que já conhecemos:
 
 - Uma **sequência** de DNA é uma **string**. Ex: `"ATCG"`.
 - Um **organismo** (uma entrada do arquivo FASTA) é um **dicionário** com três chaves:
@@ -40,62 +45,6 @@ Nada de classes por aqui! Vamos usar só o que já conhecemos:
 
 Esse formato é bem prático: dá para percorrer com um `for`, e no exercício de pandas ele
 vira uma tabela com uma linha por organismo.
-
---------------------------
-
-## De onde vêm os dados: o arquivo `arquivos/Flaviviridae-genomes.fasta`
-
-### O que é o NCBI
-
-O **NCBI** (National Center for Biotechnology Information) é um instituto público
-americano que mantém as maiores bases de dados biológicos do mundo — sequências de DNA,
-RNA, proteínas, genomas inteiros, artigos científicos, etc. Praticamente todo pesquisador
-de biologia molecular do planeta usa (ou já usou) dados de lá.
-
-Dentro do NCBI existe o **RefSeq**, uma coleção "curada" de genomas de referência: para
-cada organismo (ou vírus), o RefSeq guarda uma sequência representativa, revisada e bem
-anotada, identificada por um código no formato `NC_XXXXXX.X` (repare que é exatamente o
-prefixo dos IDs no nosso FASTA, tipo `NC_001477.1`).
-
-O arquivo `arquivos/Flaviviridae-genomes.fasta` foi baixado direto do RefSeq/NCBI: ele
-reúne os genomas de referência de **todos os vírus classificados na família
-Flaviviridae** — 159 vírus ao todo. Cada entrada do FASTA é um vírus diferente, com seu
-próprio genoma completo (ou quase completo — alguns são "partial genome", genoma
-parcial).
-
-### Por que a família Flaviviridae importa
-
-Flaviviridae é uma família de vírus de RNA de fita simples, muitos deles transmitidos por
-mosquitos ou carrapatos, e ela inclui alguns dos patógenos humanos mais relevantes da
-história recente:
-
-- **Dengue virus** (4 sorotipos diferentes no arquivo: Dengue 1 a 4)
-- **Zika virus**
-- **Yellow fever virus** (febre amarela)
-- **West Nile virus** (febre do Nilo Ocidental)
-- **Hepatitis C virus** (hepatite C, várias genótipos no arquivo)
-
-Além desses, o arquivo tem dezenas de vírus menos conhecidos do público, mas igualmente
-estudados: pestivírus de gado e porcos (como o *Bovine viral diarrhea virus*, que causa
-prejuízos enormes na pecuária), vírus encontrados em morcegos, roedores, pangolins,
-golfinhos e até em insetos — o que ajuda cientistas a entender de onde vírus novos podem
-"pular" para humanos (spillover).
-
-Ou seja: é uma família com nomes de peso em saúde pública, mas também um bom exemplo de
-como a mesma "receita" genômica (a poliproteína única, que vamos explorar na Parte 3) se
-repete em vírus que infectam hospedeiros completamente diferentes.
-
-### O que vamos analisar
-
-Vamos usar as suas funções para transformar esse arquivo de texto (só letras A, C, G, T)
-numa tabela e responder duas perguntas biológicas de verdade:
-
-1. Vírus parecidos (mesmo gênero, mesmo tipo de hospedeiro) têm uma composição química de
-   DNA parecida? É isso que a análise de **conteúdo GC** vai revelar (Parte 2).
-2. Será que todos esses vírus organizam seu genoma do mesmo jeito, com uma única
-   **poliproteína** cobrindo quase o genoma inteiro? (Parte 3)
-
-As respostas estão descritas em detalhe na seção "Usando as suas funções", mais abaixo.
 
 --------------------------
 
@@ -118,6 +67,7 @@ print(organismos[0]["sequencia"])   # sequência (string) do primeiro organismo
 
 - `DNA_PARA_AMINOACIDO`: dicionário que traduz cada códon (trinca) no seu aminoácido.
 - `DNA_STOP_CODONS`: lista com os códons de parada (stop codons).
+- `CONVERSOR_DE_BASE`: dicionário que traduz cada base para para a base convertida (ex: A -> T)
 
 --------------------------
 
@@ -248,9 +198,9 @@ Vamos ver se essa variação diz alguma coisa.
 
 Dicas:
 ```python
-df["gc"] = df["sequencia"].apply(lambda s: calcular_percentual(s, ["G", "C"]))
-df.sort_values("gc", ascending=False)[["nome", "gc"]].head(10)   # maior GC
-df.sort_values("gc")[["nome", "gc"]].head(10)                     # menor GC
+df["gc"] = df["sequencia"].apply(calcular_percentual_gc)
+df = df.sort_values("gc", ascending=False)   # A função sort_values ordena o dataframe
+# ...
 ```
 
 ---------------------------
@@ -268,12 +218,13 @@ Mas atenção: a tradução do gene **não começa na primeira base** do genoma 
 inicial que não é traduzido. Por isso precisamos primeiro achar o **start codon** (`ATG`)
 com a sua função `encontrar_inicio`, e só então traduzir.
 
-1. Crie a coluna `proteina`: para cada sequência, ache o início com `encontrar_inicio` e
+1. Modifique a coluna sequencia para ter a sequencia começando pelo o início dela.
+2. Crie a coluna `proteina`: para cada sequência, ache o início com `encontrar_inicio` e
    traduza **parando no primeiro stop codon** (`parar=True`).
-2. Crie a coluna `tamanho_proteina` com o número de aminoácidos dessa proteína.
-3. Crie a coluna `cobertura`: quanto do genoma essa proteína ocupa. Como cada aminoácido
+3. Crie a coluna `tamanho_proteina` com o número de aminoácidos dessa proteína.
+4. Crie a coluna `cobertura`: quanto do genoma essa proteína ocupa. Como cada aminoácido
    vem de 3 bases, isso é `(tamanho_proteina * 3) / tamanho`.
-4. **Conclusão (escreva num `print` ou comentário):** qual é a cobertura *típica* (use
+5. **Conclusão (escreva num `print` ou comentário):** qual é a cobertura *típica* (use
    `df["cobertura"].median()`)? Para a maioria dos vírus, a proteína cobre uma parte grande
    do genoma? Isso combina com a ideia de que esses vírus têm **uma** poliproteína só?
    (Você também vai notar alguns casos com cobertura baixa — nesses, o primeiro `ATG` que
@@ -281,12 +232,13 @@ com a sua função `encontrar_inicio`, e só então traduzir.
 
 Dicas:
 ```python
-df["proteina"] = df["sequencia"].apply(lambda s: traduzir(encontrar_inicio(s), parar=True))
-df["tamanho_proteina"] = df["proteina"].apply(len)
-df["cobertura"] = (df["tamanho_proteina"] * 3) / df["tamanho"]
+df["sequencia"] = df["sequencia"].apply(lambda sequencia: encontrar_inicio(sequencia, parar=True))
+df["proteina"] = df["sequencia"].apply(traduzir)
+# ...
 ```
 
 ---------------------------
+
 
 ## Parte 4 — Salvando o resultado
 
@@ -314,3 +266,59 @@ e dar uma nota com cuidado.
 
 Então mesmo se não funcionar 100%, eu vou conseguir dar nota de acordo com a solução.
 </content>
+
+--------------------------
+
+## De onde vêm os dados: o arquivo `arquivos/Flaviviridae-genomes.fasta`
+
+### O que é o NCBI
+
+O **NCBI** (National Center for Biotechnology Information) é um instituto público
+americano que mantém as maiores bases de dados biológicos do mundo — sequências de DNA,
+RNA, proteínas, genomas inteiros, artigos científicos, etc. Praticamente todo pesquisador
+de biologia molecular do planeta usa (ou já usou) dados de lá.
+
+Dentro do NCBI existe o **RefSeq**, uma coleção "curada" de genomas de referência: para
+cada organismo (ou vírus), o RefSeq guarda uma sequência representativa, revisada e bem
+anotada, identificada por um código no formato `NC_XXXXXX.X` (repare que é exatamente o
+prefixo dos IDs no nosso FASTA, tipo `NC_001477.1`).
+
+O arquivo `arquivos/Flaviviridae-genomes.fasta` foi baixado direto do RefSeq/NCBI: ele
+reúne os genomas de referência de **todos os vírus classificados na família
+Flaviviridae** — 159 vírus ao todo. Cada entrada do FASTA é um vírus diferente, com seu
+próprio genoma completo (ou quase completo — alguns são "partial genome", genoma
+parcial).
+
+### Por que a família Flaviviridae importa
+
+Flaviviridae é uma família de vírus de RNA de fita simples, muitos deles transmitidos por
+mosquitos ou carrapatos, e ela inclui alguns dos patógenos humanos mais relevantes da
+história recente:
+
+- **Dengue virus** (4 sorotipos diferentes no arquivo: Dengue 1 a 4)
+- **Zika virus**
+- **Yellow fever virus** (febre amarela)
+- **West Nile virus** (febre do Nilo Ocidental)
+- **Hepatitis C virus** (hepatite C, várias genótipos no arquivo)
+
+Além desses, o arquivo tem dezenas de vírus menos conhecidos do público, mas igualmente
+estudados: pestivírus de gado e porcos (como o *Bovine viral diarrhea virus*, que causa
+prejuízos enormes na pecuária), vírus encontrados em morcegos, roedores, pangolins,
+golfinhos e até em insetos — o que ajuda cientistas a entender de onde vírus novos podem
+"pular" para humanos (spillover).
+
+Ou seja: é uma família com nomes de peso em saúde pública, mas também um bom exemplo de
+como a mesma "receita" genômica (a poliproteína única, que vamos explorar na Parte 3) se
+repete em vírus que infectam hospedeiros completamente diferentes.
+
+### O que vamos analisar
+
+Vamos usar as suas funções para transformar esse arquivo de texto (só letras A, C, G, T)
+numa tabela e responder duas perguntas biológicas de verdade:
+
+1. Vírus parecidos (mesmo gênero, mesmo tipo de hospedeiro) têm uma composição química de
+   DNA parecida? É isso que a análise de **conteúdo GC** vai revelar (Parte 2).
+2. Será que todos esses vírus organizam seu genoma do mesmo jeito, com uma única
+   **poliproteína** cobrindo quase o genoma inteiro? (Parte 3)
+
+As respostas estão descritas em detalhe na seção "Usando as suas funções", mais abaixo.
