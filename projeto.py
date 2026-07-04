@@ -23,6 +23,7 @@ from bio.sequencia import (
     encontrar_inicio,
 )
 
+#teste
 
 # ------------------------------------------------------------------
 # Parte 1 — Monte a tabela
