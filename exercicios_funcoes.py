@@ -23,6 +23,26 @@ from bio.sequencia import (
 # 1) complementar        — esperado: "TAGC"
 # print(complementar("ATCG"))
 
+def complementar(sequencia):
+    """
+    Retorna uma NOVA string com a sequência complementar.
+
+    Lembre-se do pareamento das bases: A<->T e C<->G.
+    Ex: complementar("ATCG") -> "TAGC"
+
+    Dica: percorra cada base da sequência e vá montando (concatenando)
+    a sequência complementar numa nova string.
+    """
+    from bio.constantes import CONVERSOR_DE_BASE
+
+    sequencia_complementar = ""
+
+    for base in sequencia:
+        sequencia_complementar = sequencia_complementar + CONVERSOR_DE_BASE [base]
+        
+    return sequencia_complementar
+
+print(complementar("ATCG"))
 
 # 2) complementar_reversa — esperado: "CGAT"
 # print(complementar_reversa("ATCG"))
