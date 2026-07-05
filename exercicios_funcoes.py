@@ -54,6 +54,14 @@ print(complementar("ATCG"))
 
 # 4) encontrar_inicio     — esperado: "ATGGGGTAA" (começa no 1º ATG)
 # print(encontrar_inicio("CCCATGGGGTAA"))
+def encontrar_inicio(sequencia):
+    posicao_start = sequencia.find("ATG")  # Utiliza o método find() para localizar a posição do primeiro códon de start "ATG" na sequência. Se não encontrar, retorna -1.
+    if posicao_start != -1:  # Verifica se o códon de start foi encontrado (posição diferente de -1).
+        return sequencia[posicao_start:]  # Retorna a sequência a partir do códon de start encontrado, utilizando fatiamento.
+    else:
+        return ""  # Retorna uma string vazia se nenhum códon de start for encontrado.
+
+print(encontrar_inicio("CCCATGGGGTAA"))
 
 
 # 5) traduzir             — esperado: "MAIVMGR*KGAR*"
@@ -69,6 +77,15 @@ print(complementar("ATCG"))
 
 # 7) calcular_percentual_gc — esperado: ~0.66 (4 Cs/Gs em 6 bases)
 # print(calcular_percentual_gc("ATCGCC"))
+def calcular_percentual_gc(sequencia):
+    g_count = sequencia.count("G")  # Conta o número de ocorrências da base "G" na sequência.
+    c_count = sequencia.count("C")  # Conta o número de ocorrências da base "C" na sequência.
+    total_bases = len(sequencia)  # Calcula o comprimento total da sequência.
+    
+    gc_content = (g_count + c_count) / total_bases  # Calcula o percentual de GC somando as contagens de G e C e dividindo pelo total de bases.
+    return gc_content  
+
+print(calcular_percentual_gc("ATGC")) 
 
 
 # 8) contar_bases         — esperado: {"A": 2, "T": 1, "C": 1, "G": 1}
