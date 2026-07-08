@@ -97,7 +97,17 @@ def contar_bases(sequencia):
     conforme percorre cada base da sequência. (Isso vai ser bem útil no
     exercício de pandas!)
     """
-    raise NotImplementedError("Implemente a função contar_bases")
+    contagem = {
+        "A": 0,
+        "T": 0,
+        "C": 0,
+        "G": 0
+    }
+
+    for base in sequencia:
+        contagem[base] += 1
+
+    return contagem
 
 
 def encontrar_inicio(sequencia):

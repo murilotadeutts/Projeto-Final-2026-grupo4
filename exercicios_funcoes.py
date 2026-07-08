@@ -100,3 +100,18 @@ print(calcular_percentual_gc("ATGC"))
 
 # 8) contar_bases         — esperado: {"A": 2, "T": 1, "C": 1, "G": 1}
 # print(contar_bases("ATCGA"))
+def contar_bases(sequencia):
+    contagem = {
+        "A": 0,
+        "T": 0,
+        "C": 0,
+        "G": 0
+    }
+
+    for base in sequencia:
+        contagem[base] += 1
+
+    return contagem
+
+
+print(contar_bases("ATCGA"))
