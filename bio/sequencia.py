@@ -41,7 +41,13 @@ def complementar_reversa(sequencia):
     a função complementar() que acabou de escrever e depois inverter o
     resultado (lembre-se do truque de fatiamento [::-1]).
     """
-    raise NotImplementedError("Implemente a função complementar_reversa")
+    
+
+def complementar_reversa(sequencia):
+    comp=complementar(sequencia)
+    return comp[::-1]
+
+
 
 
 def transcrever(sequencia):
@@ -52,7 +58,14 @@ def transcrever(sequencia):
 
     Dica: na transcrição, a base T (timina) vira U (uracila).
     """
-    raise NotImplementedError("Implemente a função transcrever")
+    comp_dna = complementar(sequencia)
+    sequencia_rna = ""
+    for base in comp_dna:
+        if base == 'T':
+            sequencia_rna = sequencia_rna + 'U'
+        else:
+            sequencia_rna = sequencia_rna + base
+    return sequencia_rna   
 
 
 
