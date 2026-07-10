@@ -61,6 +61,17 @@ print(complementar_reversa(sequencia))
 # 3) transcrever          — esperado: "AUCG"
 # print(transcrever("ATCG"))
 
+def transcrever(sequencia):
+    comp_dna = complementar(sequencia)
+    sequencia_rna = ""
+    for base in comp_dna:
+        if base == 'T':
+            sequencia_rna = sequencia_rna + 'U'
+        else:
+            sequencia_rna = sequencia_rna + base
+    return sequencia_rna   
+
+print(transcrever(sequencia))
 
 # 4) encontrar_inicio     — esperado: "ATGGGGTAA" (começa no 1º ATG)
 # print(encontrar_inicio("CCCATGGGGTAA"))
