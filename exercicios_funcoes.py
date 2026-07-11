@@ -97,7 +97,7 @@ def traduzir(sequencia, parar=False):
     Se parar=True, interrompe a tradução no primeiro stop codon encontrado.
     Se parar=False, adiciona um '*' no lugar do stop codon e continua.
     """
-    sequencia = sequencia.upper()
+    from bio.constantes import DNA_PARA_AMINOACIDO, DNA_STOP_CODONS
     proteina = ""
     
     # Percorre a sequência pulando de 3 em 3 caracteres
@@ -116,6 +116,8 @@ def traduzir(sequencia, parar=False):
             proteina += DNA_PARA_AMINOACIDO[codon]
             
     return proteina
+
+print(traduzir("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"))
 
 
 # 6) calcular_percentual  — esperado: 0.5 (metade das bases é A)

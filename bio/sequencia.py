@@ -179,7 +179,7 @@ def traduzir(sequencia, parar=False):
         from bio.constantes import DNA_PARA_AMINOACIDO, DNA_STOP_CODONS
     Dica: para pegar as trincas, o passo do range pode ser 3 -> range(0, len, 3).
     """
-    sequencia = sequencia.upper()
+    from bio.constantes import DNA_PARA_AMINOACIDO, DNA_STOP_CODONS
     proteina = ""
     
     # Percorre a sequência pulando de 3 em 3 caracteres
