@@ -91,6 +91,32 @@ print(encontrar_inicio("CCCATGGGGTAA"))
 #    traduzir com parar=True — deve PARAR no primeiro stop codon, esperado: "MAIVMGR"
 # print(traduzir("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", parar=True))
 
+def traduzir(sequencia, parar=False):
+    """
+    Traduz uma sequência de DNA em aminoácidos.
+    Se parar=True, interrompe a tradução no primeiro stop codon encontrado.
+    Se parar=False, adiciona um '*' no lugar do stop codon e continua.
+    """
+    sequencia = sequencia.upper()
+    proteina = ""
+    
+    # Percorre a sequência pulando de 3 em 3 caracteres
+    for i in range(0, len(sequencia) - 2, 3):
+        codon = sequencia[i:i+3]
+        
+        # Verifica se é um Stop Códon
+        if codon in DNA_STOP_CODONS:
+            if parar:
+                break  # Interrompe o laço imediatamente
+            else:
+                proteina += "*"  # Adiciona o marcador de parada e continua
+        
+        # Se for um códon válido no dicionário, traduz
+        elif codon in DNA_PARA_AMINOACIDO:
+            proteina += DNA_PARA_AMINOACIDO[codon]
+            
+    return proteina
+
 
 # 6) calcular_percentual  — esperado: 0.5 (metade das bases é A)
 # print(calcular_percentual("ATCGAAAA", ["A"]))
