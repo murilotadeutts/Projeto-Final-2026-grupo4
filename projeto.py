@@ -23,7 +23,6 @@ from bio.sequencia import (
     encontrar_inicio,
 )
 
-
 # ------------------------------------------------------------------
 # Parte 1 — Monte a tabela
 # ------------------------------------------------------------------
@@ -40,6 +39,13 @@ print(df.head())
 # 3) escreva sua conclusão sobre o padrão que observou
 
 
+df["gc"] = df["sequencia"].apply(calcular_percentual_gc) # cria a coluna GC no dataframe, aplicando a função calcular_percentual_gc em cada sequência da coluna "sequencia"
+df_sorted = df.sort_values(by="gc", ascending=False) # ordena o dataframe pelo valor da coluna "gc" em ordem decrescente (do maior para o menor)
+print("10 maiores:")
+print(df_sorted.head(10)[["nome", "gc"]])
+print("10 menores:")
+print(df_sorted.tail(10)[["nome", "gc"]])
+
 # ------------------------------------------------------------------
 # Parte 3 — Encontre a proteína (a poliproteína viral)
 # ------------------------------------------------------------------
@@ -47,6 +53,7 @@ print(df.head())
 # 2) coluna "tamanho_proteina": len da proteína
 # 3) coluna "cobertura": (tamanho_proteina * 3) / tamanho
 # 4) escreva sua conclusão (qual a cobertura típica? faz sentido ser 1 poliproteína?)
+
 
 
 # ------------------------------------------------------------------
