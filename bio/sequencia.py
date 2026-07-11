@@ -179,4 +179,22 @@ def traduzir(sequencia, parar=False):
         from bio.constantes import DNA_PARA_AMINOACIDO, DNA_STOP_CODONS
     Dica: para pegar as trincas, o passo do range pode ser 3 -> range(0, len, 3).
     """
-    raise NotImplementedError("Implemente a função traduzir")
+    sequencia = sequencia.upper()
+    proteina = ""
+    
+    # Percorre a sequência pulando de 3 em 3 caracteres
+    for i in range(0, len(sequencia) - 2, 3):
+        codon = sequencia[i:i+3]
+        
+        # Verifica se é um Stop Códon
+        if codon in DNA_STOP_CODONS:
+            if parar:
+                break  # Interrompe o laço imediatamente
+            else:
+                proteina += "*"  # Adiciona o marcador de parada e continua
+        
+        # Se for um códon válido no dicionário, traduz
+        elif codon in DNA_PARA_AMINOACIDO:
+            proteina += DNA_PARA_AMINOACIDO[codon]
+            
+    return proteina
