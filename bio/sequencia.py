@@ -41,7 +41,13 @@ def complementar_reversa(sequencia):
     a função complementar() que acabou de escrever e depois inverter o
     resultado (lembre-se do truque de fatiamento [::-1]).
     """
-    raise NotImplementedError("Implemente a função complementar_reversa")
+    
+
+def complementar_reversa(sequencia):
+    comp=complementar(sequencia)
+    return comp[::-1]
+
+
 
 
 def transcrever(sequencia):
@@ -52,7 +58,14 @@ def transcrever(sequencia):
 
     Dica: na transcrição, a base T (timina) vira U (uracila).
     """
-    raise NotImplementedError("Implemente a função transcrever")
+    comp_dna = complementar(sequencia)
+    sequencia_rna = ""
+    for base in comp_dna:
+        if base == 'T':
+            sequencia_rna = sequencia_rna + 'U'
+        else:
+            sequencia_rna = sequencia_rna + base
+    return sequencia_rna   
 
 
 
@@ -79,7 +92,12 @@ def calcular_percentual_gc(sequencia):
     já vem pronta com as bases "G" e "C", assim dá pra usar direto com
     df["sequencia"].apply(calcular_percentual_gc), sem precisar de lambda.
     """
-    return calcular_percentual(sequencia, ["G", "C"])
+    g_count = sequencia.count("G")  # Conta o número de ocorrências da base "G" na sequência.
+    c_count = sequencia.count("C")  # Conta o número de ocorrências da base "C" na sequência.
+    total_bases = len(sequencia)  # Calcula o comprimento total da sequência.
+    
+    gc_content = (g_count + c_count) / total_bases  # Calcula o percentual de GC somando as contagens de G e C e dividindo pelo total de bases.
+    return gc_content  
 
 
 def contar_bases(sequencia):
@@ -92,7 +110,17 @@ def contar_bases(sequencia):
     conforme percorre cada base da sequência. (Isso vai ser bem útil no
     exercício de pandas!)
     """
-    raise NotImplementedError("Implemente a função contar_bases")
+    contagem = {
+        "A": 0,
+        "T": 0,
+        "C": 0,
+        "G": 0
+    }
+
+    for base in sequencia:
+        contagem[base] += 1
+
+    return contagem
 
 
 def encontrar_inicio(sequencia):
@@ -113,7 +141,11 @@ def encontrar_inicio(sequencia):
     Dica: as strings têm um método .find("ATG") que devolve a posição do
     primeiro "ATG" (ou -1 se não encontrar). A partir daí, use fatiamento.
     """
-    raise NotImplementedError("Implemente a função encontrar_inicio")
+    posicao_start = sequencia.find("ATG")  # Utiliza o método find() para localizar a posição do primeiro códon de start "ATG" na sequência. Se não encontrar, retorna -1.
+    if posicao_start != -1:  # Verifica se o códon de start foi encontrado (posição diferente de -1).
+        return sequencia[posicao_start:]  # Retorna a sequência a partir do códon de start encontrado, utilizando fatiamento.
+    else:
+        return ""  # Retorna uma string vazia se nenhum códon de start for encontrado.
 
 
 def traduzir(sequencia, parar=False):
