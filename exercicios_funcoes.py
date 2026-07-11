@@ -66,6 +66,17 @@ print(complementar("ATCG"))
 # 6) calcular_percentual  — esperado: 0.5 (metade das bases é A)
 # print(calcular_percentual("ATCGAAAA", ["A"]))
 
+def calcular_percentual(sequencia, bases):
+    tamanho_da_sequencia = len(sequencia)
+    contagem = 0
+    for base in sequencia:
+        if base == bases:
+            contagem += 1
+            
+    percentual = contagem / tamanho_da_sequencia
+    return percentual
+
+print(calcular_percentual("ATAACAT", "A"))
 
 # 7) calcular_percentual_gc — esperado: ~0.66 (4 Cs/Gs em 6 bases)
 # print(calcular_percentual_gc("ATCGCC"))
