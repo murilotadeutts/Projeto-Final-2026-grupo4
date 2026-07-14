@@ -85,7 +85,7 @@ print(f"A mediana da cobertura é {cobertura_mediana:.2f}, o que significa que, 
 print("Isso é fortemente consistente com o modelo biológico dos Flaviviridae: eles possuem uma única ORF (poliproteína) que cobre praticamente todo o genoma, restando apenas pequenas regiões não traduzidas (UTRs) nas extremidades.")
 print("\n Observamos, porém, uma distribuição bimodal:")
 print(f"  - {len(alta_cobertura)} vírus têm cobertura > 0.9, indicando genomas completos e bem anotados, onde a poliproteína ocupa quase todo o genoma.")
-print(f"  - {len(baixa_cobertura)} vírus têm cobertura < 0.3, com valores muito baixos (muitos abaixo de 0.01).")
+print(f"  - {len(baixa_cobertura)} vírus têm cobertura < 0.3, com valores muito baixos.")
 print("Isso sugere que esses genomas estão incompletos ou mal anotados, possivelmente devido a erros de sequenciamento ou regiões faltantes.")
 print("Pode ter ocasionado stop codons prematuros ou ausência de regiões codificantes, resultando em proteínas truncadas ou inexistentes.")
       
