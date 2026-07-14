@@ -23,58 +23,47 @@ from bio.sequencia import (
 # 1) complementar        — esperado: "TAGC"
 # print(complementar("ATCG"))
 
-sequencia = input("Digite a sequência de DNA: ").strip().upper()
-
-
 def complementar(sequencia):
-    """
-    Retorna uma NOVA string com a sequência complementar.
-
-    Lembre-se do pareamento das bases: A<->T e C<->G.
-    Ex: complementar("ATCG") -> "TAGC"
-
-    Dica: percorra cada base da sequência e vá montando (concatenando)
-    a sequência complementar numa nova string.
-    """
-
-
+ 
     from bio.constantes import CONVERSOR_DE_BASE
-    sequencia = sequencia.upper()
-    sequencia_complementar = ""
 
-    for base in sequencia:
-        sequencia_complementar = sequencia_complementar + CONVERSOR_DE_BASE [base]
+    sequencia_complementar = "" 
+
+    for base in sequencia: 
+        sequencia_complementar = sequencia_complementar + CONVERSOR_DE_BASE [base] # Adiciona o complemento da base atual à sequência complementar, utilizando o dicionário CONVERSOR_DE_BASE para obter o par complementar correto.
         
     return sequencia_complementar
 
-print(complementar(sequencia))
+print(complementar("ATCG"))
 
 # 2) complementar_reversa — esperado: "CGAT"
 # print(complementar_reversa("ATCG"))
 
 def complementar_reversa(sequencia):
-    comp=complementar(sequencia)
-    return comp[::-1]
+    comp=complementar(sequencia) # Obtém a sequência complementar chamando a função complementar() com a sequência original como argumento.
+    return comp[::-1] # Retorna a sequência complementar invertida, utilizando fatiamento [::-1] para reverter a ordem dos caracteres na string. Isso produz a sequência complementar reversa desejada.
 
-print(complementar_reversa(sequencia))
+print(complementar_reversa("ATCG"))
 
 # 3) transcrever          — esperado: "AUCG"
 # print(transcrever("ATCG"))
 
 def transcrever(sequencia):
-    comp_dna = complementar(sequencia)
+   
+    comp_dna = complementar(sequencia) # Obtém a sequência complementar chamando a função complementar() com a sequência original como argumento. Isso é necessário porque a transcrição envolve a síntese de RNA a partir da fita complementar do DNA.
     sequencia_rna = ""
     for base in comp_dna:
-        if base == 'T':
-            sequencia_rna = sequencia_rna + 'U'
+        if base == 'T': # Verifica se a base atual é 'T' (timina). Se for, substitui por 'U' (uracila) na sequência de RNA.
+            sequencia_rna = sequencia_rna + 'U' 
         else:
-            sequencia_rna = sequencia_rna + base
+            sequencia_rna = sequencia_rna + base # Adiciona a base atual à sequência de RNA sem alteração, pois não é uma timina.
     return sequencia_rna   
 
-print(transcrever(sequencia))
+print(transcrever("ATCG"))
 
 # 4) encontrar_inicio     — esperado: "ATGGGGTAA" (começa no 1º ATG)
 # print(encontrar_inicio("CCCATGGGGTAA"))
+
 def encontrar_inicio(sequencia):
     posicao_start = sequencia.find("ATG")  # Utiliza o método find() para localizar a posição do primeiro códon de start "ATG" na sequência. Se não encontrar, retorna -1.
     if posicao_start != -1:  # Verifica se o códon de start foi encontrado (posição diferente de -1).
@@ -92,11 +81,7 @@ print(encontrar_inicio("CCCATGGGGTAA"))
 # print(traduzir("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", parar=True))
 
 def traduzir(sequencia, parar=False):
-    """
-    Traduz uma sequência de DNA em aminoácidos.
-    Se parar=True, interrompe a tradução no primeiro stop codon encontrado.
-    Se parar=False, adiciona um '*' no lugar do stop codon e continua.
-    """
+   
     from bio.constantes import DNA_PARA_AMINOACIDO, DNA_STOP_CODONS
     proteina = ""
     
@@ -124,19 +109,20 @@ print(traduzir("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"))
 # print(calcular_percentual("ATCGAAAA", ["A"]))
 
 def calcular_percentual(sequencia, bases):
-    tamanho_da_sequencia = len(sequencia)
-    contagem = 0
+    tamanho_da_sequencia = len(sequencia) # Calcula o comprimento total da sequência.
+    contagem = 0 # Inicializa a variável contagem para contar quantas bases da sequência estão na lista fornecida.
     for base in sequencia:
-        if base == bases:
-            contagem += 1
+        if base == bases: # Verifica se a base atual está na lista de bases fornecida.
+            contagem += 1 # Incrementa a contagem se a base estiver na lista.
             
-    percentual = contagem / tamanho_da_sequencia
+    percentual = contagem / tamanho_da_sequencia # Calcula o percentual de bases encontradas dividindo a contagem pelo comprimento total da sequência.
     return percentual
 
-print(calcular_percentual("ATAACAT", "A"))
+print(calcular_percentual("ATCGTAAA", "A"))
 
 # 7) calcular_percentual_gc — esperado: ~0.66 (4 Cs/Gs em 6 bases)
 # print(calcular_percentual_gc("ATCGCC"))
+
 def calcular_percentual_gc(sequencia):
     g_count = sequencia.count("G")  # Conta o número de ocorrências da base "G" na sequência.
     c_count = sequencia.count("C")  # Conta o número de ocorrências da base "C" na sequência.
@@ -145,13 +131,14 @@ def calcular_percentual_gc(sequencia):
     gc_content = (g_count + c_count) / total_bases  # Calcula o percentual de GC somando as contagens de G e C e dividindo pelo total de bases.
     return gc_content  
 
-print(calcular_percentual_gc("ATGC")) 
+print(calcular_percentual_gc("ATCGCC")) 
 
 
 # 8) contar_bases         — esperado: {"A": 2, "T": 1, "C": 1, "G": 1}
 # print(contar_bases("ATCGA"))
+
 def contar_bases(sequencia):
-    contagem = {
+    contagem = { # Inicializa um dicionário chamado contagem com as bases A, T, C e G, todas com valor inicial 0. Isso servirá para armazenar a contagem de cada base na sequência fornecida.
         "A": 0,
         "T": 0,
         "C": 0,
@@ -159,9 +146,8 @@ def contar_bases(sequencia):
     }
 
     for base in sequencia:
-        contagem[base] += 1
+        contagem[base] += 1 # Incrementa a contagem da base atual no dicionário contagem. Para cada base na sequência, o valor correspondente no dicionário é aumentado em 1.
 
     return contagem
-
 
 print(contar_bases("ATCGA"))
