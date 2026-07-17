@@ -57,15 +57,11 @@ def transcrever(sequencia):
 
     Dica: na transcrição, a base T (timina) vira U (uracila).
     """
-    comp_dna = complementar(sequencia) # Obtém a sequência complementar chamando a função complementar() com a sequência original como argumento. Isso é necessário porque a transcrição envolve a síntese de RNA a partir da fita complementar do DNA.
-    sequencia_rna = ""
-    for base in comp_dna:
-        if base == 'T': # Verifica se a base atual é 'T' (timina). Se for, substitui por 'U' (uracila) na sequência de RNA.
-            sequencia_rna = sequencia_rna + 'U' 
-        else:
-            sequencia_rna = sequencia_rna + base # Adiciona a base atual à sequência de RNA sem alteração, pois não é uma timina.
     
-    return sequencia_rna 
+    rna = sequencia.replace("T", "U") # Substitui todas as ocorrências da base T (timina) por U (uracila) na sequência de DNA, utilizando o método replace() da string. Isso simula o processo de transcrição, onde a timina é substituída pela uracila no RNA.
+    return rna # Retorna a sequência de RNA resultante após a substituição.
+
+
 
 
 
@@ -186,7 +182,7 @@ def traduzir(sequencia, parar=False):
     proteina = ""
     
     # Percorre a sequência pulando de 3 em 3 caracteres
-    for i in range(0, len(sequencia) - 2, 3):
+    for i in range(0, len(sequencia), 3):
         codon = sequencia[i:i+3]
         
         # Verifica se é um Stop Códon
