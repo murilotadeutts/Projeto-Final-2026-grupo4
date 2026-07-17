@@ -79,7 +79,7 @@ def traduzir(sequencia, parar=False):
     proteina = ""
     
     # Percorre a sequência pulando de 3 em 3 caracteres
-    for i in range(0, len(sequencia) - 2, 3):
+    for i in range(0, len(sequencia), 3):
         codon = sequencia[i:i+3]
         
         # Verifica se é um Stop Códon
