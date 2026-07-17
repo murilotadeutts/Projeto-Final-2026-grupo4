@@ -28,7 +28,6 @@ from bio.sequencia import (
 # ------------------------------------------------------------------
 organismos = ler_fasta("arquivos/Flaviviridae-genomes.fasta") # Lê o arquivo FASTA contendo as sequências genômicas da família Flaviviridae e armazena os dados em uma lista de dicionários chamada "organismos".
 df = pd.DataFrame(organismos) # Cria um DataFrame do pandas chamado "df" a partir da lista de dicionários "organismos". Cada dicionário se torna uma linha no DataFrame, e as chaves dos dicionários se tornam os nomes das colunas.
-df["tamanho"] = df["sequencia"].apply(len) # Cria uma nova coluna chamada "tamanho" no DataFrame "df". Essa coluna é preenchida aplicando a função len() a cada sequência na coluna "sequencia", calculando assim o comprimento (número de nucleotídeos) de cada sequência genômica. O resultado é armazenado na nova coluna "tamanho".
 print(df.head())
 
 
@@ -66,6 +65,7 @@ print("Portanto, o GC é um marcador que reflete a história evolutiva da famíl
 
 df["seq_inicio"] = df["sequencia"].apply(encontrar_inicio) # Cria a coluna "seq_inicio" no DataFrame df aplicando a função encontrar_inicio em cada sequência da coluna "sequencia". Isso extrai a subsequência a partir do primeiro códon de start "ATG" para cada vírus e armazena o resultado na nova coluna "seq_inicio".
 df["proteina"] = df["sequencia"].apply(lambda seq: traduzir(encontrar_inicio(seq), parar=True)) # Cria a coluna "proteina" no DataFrame df aplicando a função traduzir em cada sequência da coluna "seq_inicio". A função é chamada com o argumento parar=True para que a tradução pare no primeiro códon de parada encontrado. Isso gera a proteína correspondente à sequência viral e armazena o resultado na nova coluna "proteina".
+df["tamanho"] = df["sequencia"].apply(len) # Cria uma nova coluna chamada "tamanho" no DataFrame "df". Essa coluna é preenchida aplicando a função len() a cada sequência na coluna "sequencia", calculando assim o comprimento (número de nucleotídeos) de cada sequência genômica. O resultado é armazenado na nova coluna "tamanho".
 df["tamanho_proteina"] = df["proteina"].apply(len) # Cria a coluna "tamanho_proteina" no DataFrame df aplicando a função len em cada sequência da coluna "proteina". Isso calcula o comprimento (número de aminoácidos) de cada proteína viral e armazena o resultado na nova coluna "tamanho_proteina".
 df["cobertura"] = (df["tamanho_proteina"] * 3) / df["tamanho"] # Cria a coluna "cobertura" no DataFrame df calculando a proporção da sequência viral que é traduzida em proteína. A fórmula utilizada é (tamanho_proteina * 3) / tamanho, onde tamanho_proteina é o número de aminoácidos na proteína e tamanho é o comprimento total da sequência viral em nucleotídeos. Multiplicamos por 3 porque cada aminoácido é codificado por um códon de 3 nucleotídeos. O resultado é armazenado na nova coluna "cobertura".
 cobertura_mediana = df["cobertura"].median() # calcula a mediana da coluna "cobertura"
