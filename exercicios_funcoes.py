@@ -73,29 +73,27 @@ print(encontrar_inicio("CCCATGGGGTAA"))
 #    traduzir com parar=True — deve PARAR no primeiro stop codon, esperado: "MAIVMGR"
 # print(traduzir("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG", parar=True))
 
-def traduzir(sequencia, parar=False):
-   
-    from bio.constantes import DNA_PARA_AMINOACIDO, DNA_STOP_CODONS
-    proteina = ""
+def traduzir(sequencia, parar=True):
     
-    # Percorre a sequência pulando de 3 em 3 caracteres
-    for i in range(0, len(sequencia), 3):
-        codon = sequencia[i:i+3]
-        
-        # Verifica se é um Stop Códon
-        if codon in DNA_STOP_CODONS:
-            if parar:
-                break  # Interrompe o laço imediatamente
-            else:
-                proteina += "*"  # Adiciona o marcador de parada e continua
-        
-        # Se for um códon válido no dicionário, traduz
-        elif codon in DNA_PARA_AMINOACIDO:
-            proteina += DNA_PARA_AMINOACIDO[codon]
-            
-    return proteina
+    from bio.constantes import DNA_PARA_AMINOACIDO, DNA_STOP_CODONS
 
-print(traduzir("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"))
+    proteina = ""  
+
+    for i in range(0, len(sequencia), 3):  # Itera sobre a sequência em passos de 3, para pegar cada códon.
+        codon = sequencia[i:i+3]  # Extrai o códon atual (trinca de bases) da sequência.
+
+        if codon in DNA_STOP_CODONS:  # Verifica se o códon é um stop codon.
+            proteina += "*"  # Adiciona "*" à proteína para indicar o stop codon.
+            if parar:  # Se a opção de parar no primeiro stop codon estiver ativada,
+                break  # interrompe a tradução e sai do loop.
+        elif codon in DNA_PARA_AMINOACIDO:  # Verifica se o códon está no dicionário de tradução.
+            proteina += DNA_PARA_AMINOACIDO[codon]  # Adiciona o aminoácido correspondente à proteína.
+        else:
+            proteina += "X"  # Se o códon não estiver no dicionário, adiciona "X" para indicar base indefinida.
+
+    return proteina 
+
+print (traduzir("ATGGCCATTGTAATGGGCCGCTGAAAGGGTGCCCGATAG"))
 
 
 # 6) calcular_percentual  — esperado: 0.5 (metade das bases é A)
