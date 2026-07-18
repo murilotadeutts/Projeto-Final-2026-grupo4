@@ -26,8 +26,8 @@ from bio.sequencia import (
 # ------------------------------------------------------------------
 # Parte 1 — Monte a tabela
 # ------------------------------------------------------------------
-organismos = ler_fasta("arquivos/Flaviviridae-genomes.fasta") # Lê o arquivo FASTA contendo as sequências genômicas da família Flaviviridae e armazena os dados em uma lista de dicionários chamada "organismos".
-df = pd.DataFrame(organismos) # Cria um DataFrame do pandas chamado "df" a partir da lista de dicionários "organismos". Cada dicionário se torna uma linha no DataFrame, e as chaves dos dicionários se tornam os nomes das colunas.
+organismos = ler_fasta("arquivos/Flaviviridae-genomes.fasta") # Lê o arquivo FASTA e armazena os dados em uma lista de dicionários chamada "organismos".
+df = pd.DataFrame(organismos) # Cria um DataFrame do pandas chamado "df" a partir da lista de dicionários "organismos".
 print(df.head())
 
 
@@ -43,10 +43,10 @@ df["gc"] = df["sequencia"].apply(calcular_percentual_gc) # cria a coluna GC no d
 df_sorted = df.sort_values(by="gc", ascending=False) # ordena o dataframe pelo valor da coluna "gc" em ordem decrescente (do maior para o menor)
 
 print("10 maiores concentração GC:")
-print(df_sorted.head(10)[["nome", "gc"]]) # exibe as 10 primeiras linhas do dataframe ordenado, mostrando apenas as colunas "nome" e "gc", que correspondem ao nome do vírus e à sua concentração de GC, respectivamente.
+print(df_sorted.head(10)[["nome", "gc"]]) # exibe as 10 primeiras linhas do dataframe ordenado, mostrando apenas as colunas "nome" e "gc".
 
 print("10 menores concentração GC:")
-print(df_sorted.tail(10)[["nome", "gc"]]) # exibe as 10 últimas linhas do dataframe ordenado, mostrando apenas as colunas "nome" e "gc", que correspondem ao nome do vírus e à sua concentração de GC, respectivamente. Isso permite identificar os vírus com menor concentração de GC na família Flaviviridae.
+print(df_sorted.tail(10)[["nome", "gc"]]) # exibe as 10 últimas linhas do dataframe ordenado, mostrando apenas as colunas "nome" e "gc".
 
 print("\n--- Conclusão sobre o GC ---")
 print("Os 10 vírus com maior GC são quase todos dos gêneros Pegivirus e Hepacivirus (incluindo Hepatitis C e GB virus).")
@@ -63,20 +63,20 @@ print("Portanto, o GC é um marcador que reflete a história evolutiva da famíl
 # 3) coluna "cobertura": (tamanho_proteina * 3) / tamanho
 # 4) escreva sua conclusão (qual a cobertura típica? faz sentido ser 1 poliproteína?)
 
-df["seq_inicio"] = df["sequencia"].apply(encontrar_inicio) # Cria a coluna "seq_inicio" no DataFrame df aplicando a função encontrar_inicio em cada sequência da coluna "sequencia". Isso extrai a subsequência a partir do primeiro códon de start "ATG" para cada vírus e armazena o resultado na nova coluna "seq_inicio".
-df["proteina"] = df["sequencia"].apply(lambda seq: traduzir(encontrar_inicio(seq), parar=True)) # Cria a coluna "proteina" no DataFrame df aplicando a função traduzir em cada sequência da coluna "seq_inicio". A função é chamada com o argumento parar=True para que a tradução pare no primeiro códon de parada encontrado. Isso gera a proteína correspondente à sequência viral e armazena o resultado na nova coluna "proteina".
-df["tamanho"] = df["sequencia"].apply(len) # Cria uma nova coluna chamada "tamanho" no DataFrame "df". Essa coluna é preenchida aplicando a função len() a cada sequência na coluna "sequencia", calculando assim o comprimento (número de nucleotídeos) de cada sequência genômica. O resultado é armazenado na nova coluna "tamanho".
-df["tamanho_proteina"] = df["proteina"].apply(len) # Cria a coluna "tamanho_proteina" no DataFrame df aplicando a função len em cada sequência da coluna "proteina". Isso calcula o comprimento (número de aminoácidos) de cada proteína viral e armazena o resultado na nova coluna "tamanho_proteina".
-df["cobertura"] = (df["tamanho_proteina"] * 3) / df["tamanho"] # Cria a coluna "cobertura" no DataFrame df calculando a proporção da sequência viral que é traduzida em proteína. A fórmula utilizada é (tamanho_proteina * 3) / tamanho, onde tamanho_proteina é o número de aminoácidos na proteína e tamanho é o comprimento total da sequência viral em nucleotídeos. Multiplicamos por 3 porque cada aminoácido é codificado por um códon de 3 nucleotídeos. O resultado é armazenado na nova coluna "cobertura".
+df["seq_inicio"] = df["sequencia"].apply(encontrar_inicio) # Cria a coluna "seq_inicio" no DataFrame df aplicando a função encontrar_inicio em cada sequência da coluna "sequencia".
+df["proteina"] = df["seq_inicio"].apply(lambda seq: traduzir(seq, parar=True)) # Cria a coluna "proteina" no DataFrame df aplicando a função traduzir em cada sequência da coluna "seq_inicio". 
+df["tamanho_proteina"] = df["proteina"].apply(len) # Cria a coluna "tamanho_proteina" no DataFrame df aplicando a função len em cada sequência da coluna "proteina".
+df["tamanho"] = df["sequencia"].apply(len) # Cria uma nova coluna chamada "tamanho" no DataFrame "df". Essa coluna é preenchida aplicando a função len() a cada sequência na coluna "sequencia".
+df["cobertura"] = (df["tamanho_proteina"] * 3) / df["tamanho"] # Cria a coluna "cobertura" no DataFrame df calculando a proporção da sequência viral que é traduzida em proteína.
 cobertura_mediana = df["cobertura"].median() # calcula a mediana da coluna "cobertura"
 
 # Vírus com cobertura < 0.3 (quantos são?)
-baixa_cobertura = df[df["cobertura"] < 0.3][["nome", "cobertura", "tamanho"]] # Filtra o DataFrame df para obter apenas os vírus com cobertura menor que 0.3. A filtragem é feita utilizando a condição df["cobertura"] < 0.3, que seleciona as linhas onde a coluna "cobertura" é menor que 0.3. Em seguida, seleciona apenas as colunas "nome", "cobertura" e "tamanho" do DataFrame resultante, criando um novo DataFrame chamado baixa_cobertura que contém informações sobre os vírus com cobertura muito baixa.
+baixa_cobertura = df[df["cobertura"] < 0.3][["nome", "cobertura", "tamanho"]] # Filtra o DataFrame df para obter apenas os vírus com cobertura menor que 0.3. 
 print(f"\nVírus com cobertura < 0.3 ({len(baixa_cobertura)} ocorrências):")
 print(baixa_cobertura)
 
 # Vírus com cobertura > 0.9 (quantos são?)
-alta_cobertura = df[df["cobertura"] > 0.9][["nome", "cobertura", "tamanho"]] # # Filtra o DataFrame df para obter apenas os vírus com cobertura maior que 0.9. A filtragem é feita utilizando a condição df["cobertura"] > 0.9, que seleciona as linhas onde a coluna "cobertura" é maior que 0.9. Em seguida, seleciona apenas as colunas "nome", "cobertura" e "tamanho" do DataFrame resultante, criando um novo DataFrame chamado alta_cobertura que contém informações sobre os vírus com cobertura muito alta.
+alta_cobertura = df[df["cobertura"] > 0.9][["nome", "cobertura", "tamanho"]] # # Filtra o DataFrame df para obter apenas os vírus com cobertura maior que 0.9. 
 print(f"\nVírus com cobertura > 0.9 ({len(alta_cobertura)} ocorrências):")
 print(alta_cobertura)  
 
@@ -95,12 +95,10 @@ print("Pode ter ocasionado stop codons prematuros ou ausência de regiões codif
 # 1) filtre os vírus com gc > 0.5 (quantos são?)
 # 2) df.to_csv("resultado.csv", index=False)
 
-# Cria a lista de Verdadeiro/Falso (Filtro)
-filtro = df["gc"] > 0.5
-
-# Aplica a máscara para filtrar o DataFrame
+filtro = df["gc"] > 0.5 # Filtramos o DataFrame para exibir apenas os vírus com conteúdo GC acima de 50%. E mostramos quantos são.
 filtro_gc = df[filtro]
 
 print(f"\nNº de vírus com GC > 50% ({len(filtro_gc)} ocorrências):")
-df.to_csv("resultado.csv", index=False)
+
+df.to_csv("resultado.csv", index=False) # Salvamos em um arquivo csv para abrir em excel.
 
