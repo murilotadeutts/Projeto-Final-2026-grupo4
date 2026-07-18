@@ -49,7 +49,7 @@ print(complementar_reversa("ATCG"))
 # print(transcrever("ATCG"))
 
 def transcrever(sequencia):
-    rna = sequencia.replace("T", "U") # Substitui todas as ocorrências da base T (timina) por U (uracila) na sequência de DNA, utilizando o método replace() da string. Isso simula o processo de transcrição, onde a timina é substituída pela uracila no RNA.
+    rna = sequencia.replace("T", "U") # Substitui todas as ocorrências da base T (timina) por U (uracila) na sequência de DNA, utilizando o método replace() da string.
     return rna # Retorna a sequência de RNA resultante após a substituição.
 
 print(transcrever("ATCG"))
